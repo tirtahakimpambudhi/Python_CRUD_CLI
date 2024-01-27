@@ -15,6 +15,7 @@ class Database:
   def execute(self,query,data=None):
     try:
       self.cursor.execute(query,data)
+      self.commit()
     except mysql.connector.Error as err:
       print(f"Error Execute: {err}")
   
@@ -37,4 +38,10 @@ class Database:
         self.connection.close()
         print("Connection closed")
 
+  def __enter__(self):
+    self.connect()
+    return self
+
+  def __exit__(self, exc_type, exc_value, traceback):
+    self.close()
     
